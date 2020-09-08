@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Oposiciones</string>
+    <string name="download_button_description">Download Button</string>
+    <string name="block_description">Bloques</string>
+    <string name="select_difficulty">Selecciona una dificultad</string>
+    <string name="next">Siguiente</string>
+    <string name="previous">Anterior</string>
+    <string name="question">Pregunta</string>
+    <string name="finish">Terminar</string>
+</resources>
