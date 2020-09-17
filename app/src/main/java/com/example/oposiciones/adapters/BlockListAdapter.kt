@@ -29,7 +29,7 @@ class BlockListAdapter(
 
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
         val current = blocks[position]
-        holder.blockNameTextView.text = current.name.toUpperCase()
+        holder.blockNameTextView.text = current.description.toUpperCase()
         holder.itemView.setOnClickListener { listener(current) }
     }
 

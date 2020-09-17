@@ -1,6 +1,12 @@
 package com.example.oposiciones.data
 
+import androidx.lifecycle.liveData
 import com.example.oposiciones.constants.Constants
+import com.example.oposiciones.datamanager.api.LessonApi
+import com.example.oposiciones.datamanager.api.QuestionApi
+import com.example.oposiciones.datamanager.service.ServiceBuilder
+import com.example.oposiciones.datamanager.utils.Status
+import kotlinx.coroutines.Dispatchers
 import kotlin.math.min
 
 class QuestionRepository(private val questionDao: QuestionDao) {
@@ -11,32 +17,26 @@ class QuestionRepository(private val questionDao: QuestionDao) {
         return questions.shuffled().slice(0..min(questions.size - 1, Constants.EXAM_QUESTION_COUNT - 1))
     }
 
-    private suspend fun getQuestion(number: Long, lessonID: Long)
-            = questionDao.getQuestion(number, lessonID)
-
-    suspend fun updateQuestionAnswer(
-        answer: String,
-        tip: String?,
-        number: Long,
-        lessonID: Long
-    ) = questionDao.updateQuestionAnswer(answer, tip, number, lessonID)
-
-    suspend fun insert(question: Question): Long {
-        val id = questionDao.insert(question)
-        if(id == -1L) {
-            return getQuestion(question.number, question.lessonID).id
+    fun fetchQuestions(lessonID: Long) = liveData(Dispatchers.IO) {
+        val questionApi = ServiceBuilder.buildService(QuestionApi::class.java)
+        emit(Status.LOADING)
+        try {
+            val questions = questionApi.getQuestions(lessonID)
+            questionDao.insert(questions)
+            emit(Status.SUCCESS)
+        } catch (exception: Exception) {
+            emit(Status.ERROR)
         }
-        return id
     }
 
     suspend fun finishExam(questions: List<QuestionWithAnswers>) {
         for (question in questions) {
-            question.question.totalAnswers++
-            if (question.question.answer == question.question.selectedAnswer) {
-                question.question.totalHits++
+            question.entity.totalAnswers++
+            if (question.entity.selectedAnswerID == question.correctAnswerID) {
+                question.entity.totalHits++
             }
         }
-        questionDao.updateQuestions(questions.map { it.question })
+        questionDao.updateQuestions(questions.map { it.entity })
     }
 
 }

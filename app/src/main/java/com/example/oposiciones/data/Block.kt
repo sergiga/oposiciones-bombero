@@ -7,12 +7,9 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "block",
-    indices = [Index(value = ["name"], unique = true)]
+    indices = [Index(value = ["description"], unique = true)]
 )
 data class Block(
-    @ColumnInfo(name = "name") val name: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Long = 0
-}
+    @PrimaryKey() @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "description") val description: String
+)

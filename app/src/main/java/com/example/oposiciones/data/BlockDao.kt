@@ -9,17 +9,14 @@ import androidx.room.Query
 @Dao
 interface BlockDao {
 
-    @Query("SELECT * from block ORDER BY name ASC")
+    @Query("SELECT * from block ORDER BY description ASC")
     fun getBlocks(): LiveData<List<Block>>
 
     @Query("SELECT * from block WHERE id = :id")
     fun getBlockBy(id: Long): LiveData<Block>
 
-    @Query("SELECT * from block WHERE name = :name")
-    suspend fun getBlockByName(name: String): Block
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(block: Block): Long
+    suspend fun insert(block: List<Block>): List<Long>
 
     @Query("DELETE FROM block")
     suspend fun deleteAll()

@@ -18,7 +18,7 @@ class QuestionListAdapter(
 ) : RecyclerView.Adapter<QuestionListAdapter.AnswerViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var question: QuestionWithAnswers? = null
+    private lateinit var question: QuestionWithAnswers
 
     class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val descriptionTextView: TextView = itemView.findViewById(R.id.textView)
@@ -31,21 +31,21 @@ class QuestionListAdapter(
     }
 
     override fun onBindViewHolder(holder: AnswerViewHolder, position: Int) {
-        val answer = question!!.answers[position]
+        val answer = question.answers[position]
         holder.descriptionTextView.text = answer.description
         holder.itemView.setOnClickListener { listener(answer) }
-        if (question!!.question.selectedAnswer == null) {
+        if (question.entity.selectedAnswerID == null) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.background))
             holder.descriptionTextView.setTextColor(ContextCompat.getColor(context, R.color.text))
             return
         }
-        val selectedAnswer = question!!.question.selectedAnswer
-        val correctAnswer = question!!.question.answer
+        val selectedAnswerID = question.entity.selectedAnswerID
+        val correctAnswerID = question.correctAnswerID
 
-        if (answer.letter == correctAnswer) {
+        if (answer.id == correctAnswerID) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.green))
             holder.descriptionTextView.setTextColor(ContextCompat.getColor(context, R.color.background))
-        } else if (selectedAnswer == answer.letter && selectedAnswer != correctAnswer) {
+        } else if (selectedAnswerID == answer.id && selectedAnswerID != correctAnswerID) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.orange))
             holder.descriptionTextView.setTextColor(ContextCompat.getColor(context, R.color.background))
         } else {

@@ -10,24 +10,19 @@ import androidx.room.Query
 interface LessonDao {
 
     @Query("""
-    SELECT lesson.*, SUM(question.total_hits) as totalHits, SUM(question.total_answers) as totalAnswers
+    SELECT lesson.*, qst.total_answers as totalAnswers, qst.total_hits as totalHits
     FROM lesson
-    LEFT JOIN question ON lesson.id = question.lesson_id
+    LEFT JOIN (
+        SELECT lesson_id, SUM(total_answers) as total_answers, SUM(total_hits) as total_hits
+        FROM question
+        GROUP BY lesson_id
+    ) qst ON lesson.id = qst.lesson_id
     WHERE lesson.block_id = :blockID
-    ORDER BY lesson.name
     """)
     fun getBlockLessons(blockID: Long): LiveData<List<Lesson>>
 
-    @Query("""
-    SELECT *, SUM(question.total_hits) as totalHits, SUM(question.total_answers)
-    FROM lesson
-    LEFT JOIN question ON lesson.id = question.lesson_id
-    WHERE block_id = :blockID AND name = :name
-    """)
-    suspend fun getLessonByName(name: String, blockID: Long): Lesson
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(lesson: Lesson): Long
+    suspend fun insert(lesson: List<Lesson>): List<Long>
 
     @Query("DELETE FROM lesson")
     suspend fun deleteAll()

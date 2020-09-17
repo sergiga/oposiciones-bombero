@@ -2,15 +2,23 @@ package com.example.oposiciones.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import com.example.oposiciones.data.Lesson
+import com.example.oposiciones.data.AnswerRepository
 import com.example.oposiciones.data.LessonRepository
 import com.example.oposiciones.data.OposicionesDatabase
+import com.example.oposiciones.data.QuestionRepository
 
-class LessonViewModel(application: Application, blockID: Long) : AndroidViewModel(application) {
+class LessonViewModel(application: Application, private val blockID: Long) : AndroidViewModel(application) {
 
     private val lessonRepository = LessonRepository(OposicionesDatabase.getDatabase(application).lessonDao())
+    private val questionRepository = QuestionRepository(OposicionesDatabase.getDatabase(application).questionDao())
+    private val answerRepository = AnswerRepository(OposicionesDatabase.getDatabase(application).answerDao())
 
-    val blockLessons = lessonRepository.blockLessons(blockID)
+    val lessons = lessonRepository.blockLessons(blockID)
+
+    fun fetchLessons() = lessonRepository.fetchLessons(blockID)
+
+    fun fetchQuestions(lessonID: Long) = questionRepository.fetchQuestions(lessonID)
+
+    fun fetchAnswers(lessonID: Long) = answerRepository.fetchAnswers(lessonID)
 
 }

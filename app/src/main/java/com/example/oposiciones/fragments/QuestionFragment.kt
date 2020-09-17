@@ -66,19 +66,17 @@ class QuestionFragment() : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        context?.let { context ->
-            val layoutManager = LinearLayoutManager(context)
-            questionListAdapter = QuestionListAdapter(context, onSelectAnswerListener)
-            questionRecyclerView.apply {
-                this.adapter = questionListAdapter
-                this.layoutManager = layoutManager
-            }
+        val layoutManager = LinearLayoutManager(requireContext())
+        questionListAdapter = QuestionListAdapter(requireContext(), onSelectAnswerListener)
+        questionRecyclerView.apply {
+            this.adapter = questionListAdapter
+            this.layoutManager = layoutManager
         }
     }
 
     private fun setupQuestion() {
         val question = examViewModel.getCurrentQuestion()
-        questionDescriptionTextView.text = question.question.description
+        questionDescriptionTextView.text = question.entity.description
         finishButton.visibility = if (examViewModel.isFinishButtonVisible()) View.VISIBLE else View.GONE
         nextButton.visibility = if (examViewModel.isNextButtonVisible()) View.VISIBLE else View.GONE
         previousButton.visibility = if (examViewModel.isPreviousButtonVisible()) View.VISIBLE else View.GONE

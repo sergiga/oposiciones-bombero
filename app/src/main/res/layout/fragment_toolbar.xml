@@ -25,17 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/syncButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="#00FFFFFF"
-            android:contentDescription="@string/app_name"
-            android:src="@android:drawable/stat_notify_sync_noanim"
-            android:tint="#000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

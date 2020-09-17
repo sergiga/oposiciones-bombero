@@ -1,17 +1,23 @@
 package com.example.oposiciones.data
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import com.example.oposiciones.datamanager.api.AnswerApi
+import com.example.oposiciones.datamanager.service.ServiceBuilder
+import com.example.oposiciones.datamanager.utils.Status
+import kotlinx.coroutines.Dispatchers
 
 class AnswerRepository(private val answerDao: AnswerDao) {
 
-    fun questionAnswers(questionID: Long): LiveData<List<Answer>>
-            = answerDao.getQuestionAnswers(questionID)
-
-    suspend fun insert(answer: Answer): Long {
-        var id = answerDao.insert(answer)
-        if(id == -1L) {
-            return answerDao.getQuestion(answer.letter, answer.questionID).id
+    fun fetchAnswers(lessonID: Long) = liveData(Dispatchers.IO) {
+        val answerApi = ServiceBuilder.buildService(AnswerApi::class.java)
+        emit(Status.LOADING)
+        try {
+            val questions = answerApi.getQuestions(lessonID)
+            answerDao.insert(questions)
+            emit(Status.SUCCESS)
+        } catch (exception: Exception) {
+            emit(Status.ERROR)
         }
-        return id
     }
+
 }

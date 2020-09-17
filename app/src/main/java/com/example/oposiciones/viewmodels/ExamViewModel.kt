@@ -37,11 +37,12 @@ class ExamViewModel (application: Application) : AndroidViewModel(application) {
     }
 
     fun selectAnswer(answer: Answer) {
-        val question = selectedQuestions[currentQuestionIndex!!].question
-        if (question.selectedAnswer != null) return
-        question.selectedAnswer = answer.letter
+        if (currentQuestionIndex == null) return
+        val question = selectedQuestions[currentQuestionIndex!!].entity
+        if (question.selectedAnswerID != null) return
+        question.selectedAnswerID = answer.id
         progress.value = Pair(
-            selectedQuestions.filter { it.question.selectedAnswer != null }.size,
+            selectedQuestions.filter { it.entity.selectedAnswerID != null }.size,
             selectedQuestions.size
         )
         tip.value = question.tip
@@ -51,14 +52,14 @@ class ExamViewModel (application: Application) : AndroidViewModel(application) {
         if (selectedQuestions.isEmpty()) { return null }
         currentQuestionIndex = if (currentQuestionIndex == null) 0 else { currentQuestionIndex!! + 1 }
         val question = selectedQuestions[currentQuestionIndex!!]
-        return question.question.id
+        return question.entity.id
     }
 
     fun getPreviousQuestionID(): Long? {
         if (selectedQuestions.isEmpty()) { return null }
         currentQuestionIndex = if (currentQuestionIndex == null) 0 else { currentQuestionIndex!! - 1 }
         val question = selectedQuestions[currentQuestionIndex!!]
-        return question.question.id
+        return question.entity.id
     }
 
     fun getCurrentQuestion(): QuestionWithAnswers {

@@ -3,7 +3,7 @@ package com.example.oposiciones.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.oposiciones.R
-import com.example.oposiciones.fragments.MainFragment
+import com.example.oposiciones.fragments.BlockFragment
 import com.example.oposiciones.fragments.ToolbarFragment
 
 class MainActivity : AppCompatActivity() {
@@ -18,8 +18,9 @@ class MainActivity : AppCompatActivity() {
                     true,
                     R.color.text
                 ))
-                .replace(R.id.container, MainFragment.newInstance())
+                .replace(R.id.container, BlockFragment.newInstance())
                 .commitNow()
         }
     }
+
 }

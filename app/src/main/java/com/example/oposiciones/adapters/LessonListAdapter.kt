@@ -30,7 +30,7 @@ class LessonListAdapter(
 
     override fun onBindViewHolder(holder: LessonViewHolder, position: Int) {
         val current = lessons[position]
-        holder.lessonNameTextView.text = current.name.toUpperCase()
+        holder.lessonNameTextView.text = current.description.toUpperCase()
         if (current.globalScore == null) {
             holder.scoreTextView.visibility = View.GONE
         } else {
