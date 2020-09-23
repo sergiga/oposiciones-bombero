@@ -71,8 +71,8 @@ class LessonsFragment(
     }
 
     private fun setupRecyclerView() {
-        var layoutManager = LinearLayoutManager(requireContext())
-        var adapter = LessonListAdapter(requireContext(), onSelectLessonListener)
+        val layoutManager = LinearLayoutManager(requireContext())
+        val adapter = LessonListAdapter(requireContext(), onSelectLessonListener)
         lessonRecyclerView.apply {
             this.adapter = adapter
             this.layoutManager = layoutManager
@@ -91,32 +91,26 @@ class LessonsFragment(
 
     private fun fetchLessons() {
         lessonViewModel.fetchLessons().observe(viewLifecycleOwner, Observer {
-            swipeRefreshLayout.isRefreshing = false
             when (it) {
-                Status.ERROR -> {
-                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
-                }
+                Status.ERROR -> swipeRefreshLayout.isRefreshing = false
+                Status.SUCCESS -> swipeRefreshLayout.isRefreshing = false
             }
         })
     }
 
     private fun fetchQuestions(lessonID: Long) {
-        lessonViewModel.fetchQuestions(lessonID).observe(viewLifecycleOwner, Observer{
+        lessonViewModel.fetchQuestions().observe(viewLifecycleOwner, Observer{
             when (it) {
-                Status.ERROR -> {
-                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
-                }
+                Status.ERROR -> fetchAnswers(lessonID)
                 Status.SUCCESS -> fetchAnswers(lessonID)
             }
         })
     }
 
     private fun fetchAnswers(lessonID: Long) {
-        lessonViewModel.fetchAnswers(lessonID).observe(viewLifecycleOwner, Observer{
+        lessonViewModel.fetchAnswers().observe(viewLifecycleOwner, Observer{
             when (it) {
-                Status.ERROR -> {
-                    Toast.makeText(context, "ERROR", Toast.LENGTH_LONG).show()
-                }
+                Status.ERROR -> startExamActivity(lessonID)
                 Status.SUCCESS -> startExamActivity(lessonID)
             }
         })

@@ -10,11 +10,11 @@ class LessonRepository(private val lessonDao: LessonDao) {
 
     fun blockLessons(blockID: Long) = lessonDao.getBlockLessons(blockID)
 
-    fun fetchLessons(blockID: Long) = liveData(Dispatchers.IO) {
+    fun fetchLessons() = liveData(Dispatchers.IO) {
         val lessonApi = ServiceBuilder.buildService(LessonApi::class.java)
         emit(Status.LOADING)
         try {
-            val lessons = lessonApi.getLessons(blockID)
+            val lessons = lessonApi.getLessons()
             lessonDao.insert(lessons)
             emit(Status.SUCCESS)
         } catch (exception: Exception) {

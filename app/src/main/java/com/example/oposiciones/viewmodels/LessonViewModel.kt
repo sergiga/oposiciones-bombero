@@ -15,10 +15,10 @@ class LessonViewModel(application: Application, private val blockID: Long) : And
 
     val lessons = lessonRepository.blockLessons(blockID)
 
-    fun fetchLessons() = lessonRepository.fetchLessons(blockID)
+    fun fetchLessons() = lessonRepository.fetchLessons()
 
-    fun fetchQuestions(lessonID: Long) = questionRepository.fetchQuestions(lessonID)
+    fun fetchQuestions() = questionRepository.fetchQuestions()
 
-    fun fetchAnswers(lessonID: Long) = answerRepository.fetchAnswers(lessonID)
+    fun fetchAnswers() = answerRepository.fetchAnswers()
 
 }

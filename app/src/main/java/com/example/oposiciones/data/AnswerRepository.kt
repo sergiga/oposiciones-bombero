@@ -8,11 +8,11 @@ import kotlinx.coroutines.Dispatchers
 
 class AnswerRepository(private val answerDao: AnswerDao) {
 
-    fun fetchAnswers(lessonID: Long) = liveData(Dispatchers.IO) {
+    fun fetchAnswers() = liveData(Dispatchers.IO) {
         val answerApi = ServiceBuilder.buildService(AnswerApi::class.java)
         emit(Status.LOADING)
         try {
-            val questions = answerApi.getQuestions(lessonID)
+            val questions = answerApi.getQuestions()
             answerDao.insert(questions)
             emit(Status.SUCCESS)
         } catch (exception: Exception) {

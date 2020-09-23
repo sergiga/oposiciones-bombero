@@ -17,11 +17,11 @@ class QuestionRepository(private val questionDao: QuestionDao) {
         return questions.shuffled().slice(0..min(questions.size - 1, Constants.EXAM_QUESTION_COUNT - 1))
     }
 
-    fun fetchQuestions(lessonID: Long) = liveData(Dispatchers.IO) {
+    fun fetchQuestions() = liveData(Dispatchers.IO) {
         val questionApi = ServiceBuilder.buildService(QuestionApi::class.java)
         emit(Status.LOADING)
         try {
-            val questions = questionApi.getQuestions(lessonID)
+            val questions = questionApi.getQuestions()
             questionDao.insert(questions)
             emit(Status.SUCCESS)
         } catch (exception: Exception) {
